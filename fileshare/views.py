@@ -1,14 +1,11 @@
 
-from django.contrib.auth import  login
+from django.contrib.auth import login
 from django.http import HttpResponse
-from .models import File
 from .controller.RegistrationController.RegistrationController import RegistrationController
 from .controller.PersonController.PersonController import PersonController
 from .controller.AuthenticationController.AuthenticationController import AuthenticationController
 from .controller.FileController.FileController import FileController
 from .serializer.modelserializers import PersonSerializer, FileSerializer
-from rest_framework import serializers
-from datetime import datetime
 
 
 # Controllers
@@ -24,7 +21,7 @@ def register(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
     if not registerController.checkIfEmailExists(email):
-        user = personController.newPerson(email, username, password)
+        user = personController.newPerson(email, username, registerController.hashPassword(password))
         serializer = PersonSerializer(user)
         print('serialized data:', serializer.data)
         response = HttpResponse(serializer.data)
@@ -74,8 +71,9 @@ def newFile(request):
 
 def displayAllFiles(request):
     files = fileController.getAllFiles()
-    json = serializers.serialize('json', files)
-    print(json)
+    serializer = FileSerializer(files, many=True)
+    result = serializer.data
+    print('All files:', result)
     response = HttpResponse(files)
     response['Content-Type'] = 'application/json'
     response['Access-Control-Allow-Origin'] = '*'

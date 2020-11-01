@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+
 class PersonLogin(models.Model):
     person = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     loged_in = models.DateField()
@@ -17,6 +18,9 @@ class Group(models.Model):
     name = models.CharField(max_length=100)
     created_at = models.DateField()
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+
+    def __str__(self):
+        return "Group name: {}, created_at: '{}' from {}".format(self.name, self.created_at, self.creator)
 
 
 class PersonGroupMember(models.Model):

@@ -1,4 +1,9 @@
+from typing import List
 from rest_framework import serializers
+
+
+def serializeList(list: List):
+    return serializers.serialize('json', list);
 
 
 class PersonSerializer(serializers.Serializer):
@@ -13,5 +18,3 @@ class FileSerializer(serializers.Serializer):
     uploaded_at = serializers.DateField()
     public = serializers.BooleanField()
     price = serializers.FloatField
-
-

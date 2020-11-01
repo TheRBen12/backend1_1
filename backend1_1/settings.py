@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'fileshare.apps.FileshareConfig',
+    'rest_framework',
 ]
 
 DATABASES = {
