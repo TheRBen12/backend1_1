@@ -7,6 +7,6 @@ class FileController:
     def getAllFiles(self) -> List[File]:
         return File.objects.all()
 
-    def newFile(self, file: File):
-        file = File.objects.create(file)
+    def newFile(self, file: File, owner) -> File:
+        file = File.objects.create(file=file, owner=owner)
         return file

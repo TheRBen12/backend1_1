@@ -18,3 +18,23 @@ class FileSerializer(serializers.Serializer):
     uploaded_at = serializers.DateField()
     public = serializers.BooleanField()
     price = serializers.FloatField
+
+
+class GroupSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    created_at = serializers.DateField()
+    creator = serializers.IntegerField()
+
+
+class InvitationSerializer(serializers.Serializer):
+    sender = PersonSerializer()
+    group = GroupSerializer()
+    created_at = serializers.DateField()
+    creator = serializers.IntegerField()
+
+
+
+
+
+
+

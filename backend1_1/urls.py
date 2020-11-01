@@ -22,7 +22,10 @@ from fileshare import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', views.register),
-    path('login/', views.authenticate)
+    path('login/', views.authenticate),
+
+    path('file/new/', views.newFile),
+
     #path('login/', include(('fileshare.urls', 'fileshare'), namespace='fileshare')),
     #path('newFile/', include(('fileshare.urls', 'fileshare'), namespace='fileshare')),
     #path('file/', include(('fileshare.urls', 'fileshare'), namespace='fileshare')),

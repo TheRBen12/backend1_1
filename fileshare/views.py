@@ -21,8 +21,8 @@ def register(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
     if not registerController.checkIfEmailExists(email):
-        user = personController.newPerson(email, username, registerController.hashPassword(password))
-        serializer = PersonSerializer(user)
+        person = personController.newPerson(email, username, registerController.hashPassword(password))
+        serializer = PersonSerializer(person)
         print('serialized data:', serializer.data)
         response = HttpResponse(serializer.data)
         response['Content-Type'] = 'application/json'
@@ -60,7 +60,9 @@ def displayPersonByEmail(request):
 def newFile(request):
     if request.method == 'POST':
         file = request.FILES['file']
-        file = fileController.newFile(file)
+        ownerid = request.POST.get('user')
+        owner = personController.getPersonByid(ownerid)
+        file = fileController.newFile(file, owner)
         serializer = FileSerializer(file)
         response = serializer.data
         response = HttpResponse(response)
