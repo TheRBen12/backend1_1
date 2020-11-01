@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 
 class AuthenticationController:
 
-    def checkLogin(self, email: str, password: str) -> User:
-        user = authenticate(email=email, password=password)
+    def checkLogin(self, username: str, password: str) -> User:
+        user = User.objects.get(username=username)
         if user is not None:
             return user
         return None

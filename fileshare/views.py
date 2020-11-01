@@ -33,15 +33,16 @@ def register(request):
 
 
 def authenticate(request):
-    email = request.POST.get('email')
-    password = request.POST.get('password')
-    user = authenticationController.checkLogin(email, password)
+    username = request.GET.get('username')
+    password = request.GET.get('password')
+    user = authenticationController.checkLogin(username, password)
     if user is not None:
         request.session['user'] = user.id
         login(request, user)
         serializer = PersonSerializer(user)
         response = HttpResponse(serializer.data)
         response.set_cookie('user', user.id)
+        response['Content-Type'] = 'application/json'
         return response
 
 

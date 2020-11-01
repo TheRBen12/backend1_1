@@ -1,14 +1,10 @@
-from typing import List
 from rest_framework import serializers
-
-
-def serializeList(list: List):
-    return serializers.serialize('json', list);
 
 
 class PersonSerializer(serializers.Serializer):
     email = serializers.CharField()
     username = serializers.CharField()
+    id = serializers.IntegerField()
 
 
 class FileSerializer(serializers.Serializer):
