@@ -35,13 +35,15 @@ def register(request):
         return HttpResponse('login failed')
 
 
-def authenticate(request, response):
+def authenticate(request):
     email = request.POST.get('email')
     password = request.POST.get('password')
     user = authenticationController.checkLogin(email, password)
     if user is not None:
         request.session['user'] = user.id
         login(request, user)
+        serializer = PersonSerializer(user)
+        response = HttpResponse(serializer.data)
         response.set_cookie('user', user.id)
         return response
 
