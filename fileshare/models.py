@@ -9,6 +9,10 @@ class PersonLogin(models.Model):
     loged_in = models.DateField()
 
 
+class LoginState(models.Model):
+    state = models.CharField(max_length=100)
+
+
 class Group(models.Model):
     name = models.CharField(max_length=100)
     created_at = models.DateField()
@@ -57,5 +61,8 @@ class FileSharePerson(models.Model):
 class FileShareGroup(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING)
+
+
+
 
 
