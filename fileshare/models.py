@@ -48,8 +48,8 @@ class File(models.Model):
 
 
 class FileSharePerson(models.Model):
-    #creator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    #receiver = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="creator")
+    receiver = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="receiver")
     file = models.ForeignKey(File, on_delete=models.DO_NOTHING)
     shared_at = models.DateField()
 
