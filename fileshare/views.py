@@ -5,6 +5,8 @@ from .controller.RegistrationController.RegistrationController import Registrati
 from .controller.PersonController.PersonController import PersonController
 from .controller.AuthenticationController.AuthenticationController import AuthenticationController
 from .controller.FileController.FileController import FileController
+from .controller.GroupController.GroupController import GroupController
+from .controller.InvitationController.InvitationController import InvitationController
 from .serializer.modelserializers import PersonSerializer, FileSerializer
 
 
@@ -13,6 +15,8 @@ registerController = RegistrationController()
 personController = PersonController()
 authenticationController = AuthenticationController()
 fileController = FileController()
+groupController = GroupController()
+invitationController = InvitationController()
 
 
 # --------------------------#Personapi#----------------------------
@@ -81,5 +85,22 @@ def displayAllFiles(request):
     response['Content-Type'] = 'application/json'
     response['Access-Control-Allow-Origin'] = '*'
     return response
+
+#----------------------GroupApi----------------------
+
+def newGroup(request):
+    group = request.body
+    group = groupController.newGroup(group)
+
+#---------------InvitatinController-----------
+
+def newInvitation(request):
+    invitationReceivers = request.body
+    sender = request.session.get('user')
+    invitation = invitationController.newInvitation(invitationReceivers, sender)
+
+
+
+
 
 

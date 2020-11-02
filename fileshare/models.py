@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from typing import List
 
 
 # Create your models here.
@@ -32,6 +33,7 @@ class PersonGroupMember(models.Model):
 class Invitation(models.Model):
     sender = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    receivers: List[int]
     created_at = models.DateField()
 
 

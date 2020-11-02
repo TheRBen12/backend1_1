@@ -14,4 +14,9 @@ class GroupController:
         return Group.objects.all()
 
     def newGroup(self, group: Group) -> Group:
-        return group.save()
+        group.save()
+        return group
+
+    def updateGroup(self, group: Group) -> Group:
+        group.save()
+        return group
