@@ -59,7 +59,7 @@ def displayPersonByEmail(request):
 # ------------------------------#Fileapi#-------------------------
 
 def newFile(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.session.get('user') is not None:
         file = request.FILES['file']
         ownerid = request.POST.get('user')
         owner = personController.getPersonByid(ownerid)
