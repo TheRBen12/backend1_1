@@ -1,4 +1,3 @@
-
 from django.contrib.auth import login
 from django.http import HttpResponse
 from .controller.RegistrationController.RegistrationController import RegistrationController
@@ -7,8 +6,7 @@ from .controller.AuthenticationController.AuthenticationController import Authen
 from .controller.FileController.FileController import FileController
 from .controller.GroupController.GroupController import GroupController
 from .controller.InvitationController.InvitationController import InvitationController
-from .serializer.modelserializers import PersonSerializer, FileSerializer
-
+from .serializer.modelserializers import PersonSerializer, FileSerializer, GroupSerializer
 
 # Controllers
 registerController = RegistrationController()
@@ -86,21 +84,22 @@ def displayAllFiles(request):
     response['Access-Control-Allow-Origin'] = '*'
     return response
 
-#----------------------GroupApi----------------------
+
+# ----------------------#GroupApi#----------------------
 
 def newGroup(request):
     group = request.body
     group = groupController.newGroup(group)
+    serializer = GroupSerializer(group)
+    response = HttpResponse(serializer.data)
+    response['Content-Type'] = 'application/json'
+    response['Access-Control-Allow-Origin'] = '*'
+    return response
 
-#---------------InvitatinController-----------
+
+# ---------------#InvitatinController#-----------
 
 def newInvitation(request):
     invitationReceivers = request.body
     sender = request.session.get('user')
     invitation = invitationController.newInvitation(invitationReceivers, sender)
-
-
-
-
-
-
