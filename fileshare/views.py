@@ -7,6 +7,8 @@ from .controller.FileController.FileController import FileController
 from .controller.GroupController.GroupController import GroupController
 from .controller.InvitationController.InvitationController import InvitationController
 from .serializer.modelserializers import PersonSerializer, FileSerializer, GroupSerializer
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 # Controllers
 registerController = RegistrationController()
@@ -18,10 +20,26 @@ invitationController = InvitationController()
 
 
 # --------------------------#Personapi#----------------------------
+@csrf_exempt
 def register(request):
-    email = request.POST.get('email')
-    username = request.POST.get('username')
-    password = request.POST.get('password')
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    print(body)
+
+    email = body['email']
+    username = body['username']
+    password = body['password']
+
+    #email = request.POST.get('email')
+    #username = request.POST.get('username')
+    #password = request.POST.get('password')
+
+    print("PASSWORD")
+    print(password)
+    print("USERNAME")
+    print(username)
+    print("EMAIL")
+    print(email)
     if not registerController.checkIfEmailExists(email):
         person = personController.newPerson(email, username, registerController.hashPassword(password))
         serializer = PersonSerializer(person)

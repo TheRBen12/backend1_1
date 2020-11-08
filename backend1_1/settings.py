@@ -68,6 +68,8 @@ CORS_ALLOWED_ORIGINS = [
    'http://localhost:4200'
 ]
 
+ALLOWED_HOSTS = ['*']
+
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
