@@ -25,8 +25,6 @@ SECRET_KEY = '!0o=7dbzt#$-1t-v4e&goop&xb4hwpzf4w#1=v)#gjv%3ucn-0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -59,7 +57,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -67,6 +65,8 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
    'http://localhost:4200'
 ]
+
+ALLOWED_HOSTS = ['*']
 
 CORS_ALLOW_METHODS = [
     'DELETE',
@@ -147,3 +147,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'pics')
 
 CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+]
