@@ -145,3 +145,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'pics')
+
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
