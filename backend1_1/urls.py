@@ -23,7 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', views.register),
     path('login/', views.authenticate),
-    path('person/delete/', views.deletePerson),
     path('file/new/', views.newFile),
 
     #path('login/', include(('fileshare.urls', 'fileshare'), namespace='fileshare')),

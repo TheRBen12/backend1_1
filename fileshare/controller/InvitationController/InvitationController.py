@@ -1,7 +1,5 @@
 from fileshare.models import Invitation, InvitationReceiver
-from django.contrib.auth.models import User
-from fileshare.models import Group
-from datetime import datetime
+
 from typing import List
 
 
