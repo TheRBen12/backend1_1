@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from passlib.context import CryptContext
+from django.contrib.auth.hashers import make_password
 
 
 class RegistrationController:
@@ -11,10 +12,15 @@ class RegistrationController:
             pbkdf2_sha256__default_rounds=30000)
 
     def checkIfEmailExists(self, email: str) -> bool:
-        user = User.objects.get(email=email)
-        if user is not None:
+        try:
+            user = User.objects.get(email=email)
             return True
-        return False
+        except User.DoesNotExist:
+            return False
+
+        #if user is not None:
+        #    return True
+        #return False
 
     def hashPassword(self, password: str) -> str:
-        return self.pwd_context.encrypt(password)
+        return make_password(password)

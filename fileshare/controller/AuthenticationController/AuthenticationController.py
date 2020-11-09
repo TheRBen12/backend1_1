@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from typing import Optional
+from django.contrib.auth.hashers import check_password
 
 
 class AuthenticationController:
@@ -9,8 +10,16 @@ class AuthenticationController:
         print("Authentication Controller initialized")
 
     def checkLogin(self, username: str, password: str) -> Optional[User]:
-        user = User.objects.get(username=username)
-        if user is not None and user.password == password:
-            return user
-        return None
+        try:
+            user = User.objects.get(username=username)
+            if(user.check_password(password)):
+                return user
+            else:
+                print('user.password', user.password)
+                print('password', password)
+                print("incorrect password")
+                return None
+        except User.DoesNotExist:
+            print("no user with username")
+            return None
 
