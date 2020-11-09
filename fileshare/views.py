@@ -7,8 +7,6 @@ from .controller.FileController.FileController import FileController
 from .controller.GroupController.GroupController import GroupController
 from .controller.InvitationController.InvitationController import InvitationController
 from .serializer.modelserializers import PersonSerializer, FileSerializer, GroupSerializer
-from django.views.decorators.csrf import csrf_exempt
-import json
 
 # Controllers
 registerController = RegistrationController()
@@ -20,7 +18,7 @@ invitationController = InvitationController()
 
 
 # --------------------------#Personapi#----------------------------
-#@csrf_exempt
+# @csrf_exempt
 def register(request):
     email = request.POST.get('email')
     username = request.POST.get('username')
@@ -64,17 +62,13 @@ def displayPersonByEmail(request):
 # ------------------------------#Fileapi#-------------------------
 
 def newFile(request):
-    if request.method == 'POST' and request.session.get('user') is not None:
-        file = request.FILES['file']
-        ownerid = request.POST.get('user')
-        owner = personController.getPersonByid(ownerid)
-        file = fileController.newFile(file, owner)
-        serializer = FileSerializer(file)
-        response = serializer.data
-        response = HttpResponse(response)
-        response['Content-Type'] = 'multipart/form-data'
-        response['Access-Control-Allow-Origin'] = '*'
-        return response
+    file = request.FILES['file']
+    owner = personController.getPersonByid(int(request.POST.get('owner')))
+    typeid = int(request.POST.get('type'))
+    file = fileController.newFile(file, owner, typeid)
+    serializer = FileSerializer(file)
+    response = JsonResponse(serializer.data)
+    return response
 
 
 def displayAllFiles(request):
@@ -86,8 +80,6 @@ def displayAllFiles(request):
     response['Content-Type'] = 'application/json'
     response['Access-Control-Allow-Origin'] = '*'
     return response
-
-
 
 
 # ----------------------#GroupApi#----------------------

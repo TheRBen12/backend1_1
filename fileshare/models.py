@@ -48,13 +48,13 @@ class FileType(models.Model):
 
 class File(models.Model):
     name = models.CharField(max_length=100)
-    size = models.FloatField()
     uploaded_at = models.DateField()
     public = models.BooleanField()
     price = models.FloatField()
     type = models.ForeignKey(FileType, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     file = models.FileField()
+    size = models.IntegerField()
 
 
 class FileSharePerson(models.Model):

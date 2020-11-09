@@ -12,15 +12,15 @@ class RegistrationController:
             pbkdf2_sha256__default_rounds=30000)
 
     def checkIfEmailExists(self, email: str) -> bool:
-        try:
-            user = User.objects.get(email=email)
+        user = User.objects.get(email=email)
+        if user is not None:
             return True
-        except User.DoesNotExist:
-            return False
+        return False
 
-        #if user is not None:
-        #    return True
-        #return False
 
-    def hashPassword(self, password: str) -> str:
-        return make_password(password)
+
+#try:
+
+            #return True
+        #except User.DoesNotExist:
+            #return False
