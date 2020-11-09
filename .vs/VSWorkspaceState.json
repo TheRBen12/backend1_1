@@ -2,7 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\backend1_1",
-    "\\fileshare"
+    "\\fileshare",
+    "\\fileshare\\controller",
+    "\\fileshare\\controller\\RegistrationController"
   ],
   "SelectedNode": "\\backend1_1\\settings.py",
   "PreviewInSolutionExplorer": false

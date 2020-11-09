@@ -1,5 +1,5 @@
 from django.contrib.auth import login
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .controller.RegistrationController.RegistrationController import RegistrationController
 from .controller.PersonController.PersonController import PersonController
 from .controller.AuthenticationController.AuthenticationController import AuthenticationController
@@ -20,50 +20,35 @@ invitationController = InvitationController()
 
 
 # --------------------------#Personapi#----------------------------
-@csrf_exempt
+#@csrf_exempt
 def register(request):
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
-    print(body)
+    email = request.POST.get('email')
+    username = request.POST.get('username')
+    password = request.POST.get('password')
 
-    email = body['email']
-    username = body['username']
-    password = body['password']
-
-    #email = request.POST.get('email')
-    #username = request.POST.get('username')
-    #password = request.POST.get('password')
-
-    print("PASSWORD")
-    print(password)
-    print("USERNAME")
-    print(username)
-    print("EMAIL")
-    print(email)
     if not registerController.checkIfEmailExists(email):
-        person = personController.newPerson(email, username, registerController.hashPassword(password))
+        person = personController.newPerson(email, username, password)
         serializer = PersonSerializer(person)
         print('serialized data:', serializer.data)
-        response = HttpResponse(serializer.data)
-        response['Content-Type'] = 'application/json'
-        response['Access-Control-Allow-Origin'] = '*'
+        response = JsonResponse(serializer.data)
         return response
     else:
-        return HttpResponse('login failed')
+        return HttpResponse('sign up failed')
 
 
 def authenticate(request):
-    username = request.GET.get('username')
-    password = request.GET.get('password')
+    username = request.POST.get('username')
+    password = request.POST.get('password')
     user = authenticationController.checkLogin(username, password)
+    print('user', user)
     if user is not None:
         request.session['user'] = user.id
         login(request, user)
         serializer = PersonSerializer(user)
-        response = HttpResponse(serializer.data)
-        response.set_cookie('user', user.id)
-        response['Content-Type'] = 'application/json'
+        response = JsonResponse(serializer.data)
         return response
+    else:
+        return HttpResponse('login failed')
 
 
 def displayPersonByEmail(request):

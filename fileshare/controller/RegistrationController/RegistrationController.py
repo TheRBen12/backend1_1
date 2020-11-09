@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from passlib.context import CryptContext
+from django.contrib.auth.hashers import make_password
 
 
 class RegistrationController:
@@ -22,4 +23,4 @@ class RegistrationController:
         #return False
 
     def hashPassword(self, password: str) -> str:
-        return self.pwd_context.encrypt(password)
+        return make_password(password)
