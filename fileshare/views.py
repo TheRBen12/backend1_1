@@ -110,4 +110,5 @@ def newInvitation(request):
     invitation = request.body
     sender = request.session.get('user')
     invitation = invitationController.newInvitation(invitation, sender)
+    return HttpResponse("sent invitation successfully")
 

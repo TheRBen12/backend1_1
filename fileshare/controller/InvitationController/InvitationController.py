@@ -10,8 +10,8 @@ class InvitationController:
 
     def newInvitation(self, invitation: Invitation, sender: int) -> Invitation:
         for receiver in invitation.receivers:
-            InvitationReceiver.objects.create(receiver_id=receiver.id, invitation_id=invitation.id)
-        invitation = Invitation.objects.create(sender_id=sender, receivers=invitation.receivers, group_id=invitation.group)
+            InvitationReceiver.objects.create(receiver_id=receiver, invitation_id=invitation.id)
+        invitation = Invitation.objects.create(sender_id=sender, receivers=invitation.receivers, group=invitation.group)
         return invitation
 
 

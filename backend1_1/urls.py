@@ -25,6 +25,7 @@ urlpatterns = [
     path('login/', views.authenticate),
     #path('person/delete/', views.deletePerson),
     path('newfile/', views.newFile),
+    path('group/', views.newGroup)
 
     #path('login/', include(('fileshare.urls', 'fileshare'), namespace='fileshare')),
     #path('newFile/', include(('fileshare.urls', 'fileshare'), namespace='fileshare')),
