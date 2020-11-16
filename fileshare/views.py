@@ -70,8 +70,9 @@ def newFile(request):
     return response
 
 
-def displayAllFiles(request):
+def displayAllPublicFiles(request):
     files = fileController.getAllFiles()
+    files = [file for file in files if file.public]
     serializer = FileSerializer(files, many=True)
     result = serializer.data
     print('All files:', result)
@@ -80,6 +81,17 @@ def displayAllFiles(request):
     response['Access-Control-Allow-Origin'] = '*'
     return response
 
+
+def getFilesByOwnerId(request):
+    id = request.session.get("user")
+    files = [file for file in fileController.getAllFiles() if file.owner.id == id]
+    serializer = FileSerializer(files, many=True)
+    result = serializer.data
+    print('All files:', result)
+    response = HttpResponse(files)
+    response['Content-Type'] = 'application/json'
+    response['Access-Control-Allow-Origin'] = '*'
+    return response
 
 
 
@@ -108,7 +120,6 @@ def displayAllGroups():
 
 def newInvitation(request):
     invitation = request.body
-    sender = request.session.get('user')
+    sender = request.session.get("user")
     invitation = invitationController.newInvitation(invitation, sender)
     return HttpResponse("sent invitation successfully")
-

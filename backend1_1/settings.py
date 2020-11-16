@@ -45,7 +45,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'HOST': 'localhost',
-        'NAME': 'FILESHARE',
+        'NAME': 'fileshare',
         'PORT': '3306',
         'USER': 'root',
         'PASSWORD': 'lamav418'
