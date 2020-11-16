@@ -18,7 +18,3 @@ class RegistrationController:
         except User.DoesNotExist:
             return False
 
-
-
-
-            
