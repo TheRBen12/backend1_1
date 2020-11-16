@@ -29,16 +29,18 @@ class PersonGroupMember(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     joined_at = models.DateField()
 
-class InvitationReceiver(models.Model):
-    receiver = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    invitation = models.ForeignKey(Invitation, on_delete=models.DO_NOTHING)
-
 
 class Invitation(models.Model):
     sender = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
-    receivers: List[InvitationReceiver]
     created_at = models.DateField()
+    receivers = List[int]
+
+
+class InvitationReceiver(models.Model):
+    receiver = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    invitation = models.ForeignKey(Invitation, on_delete=models.DO_NOTHING)
+
 
 
 class FileType(models.Model):
@@ -66,8 +68,3 @@ class FileSharePerson(models.Model):
 class FileShareGroup(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING)
-
-
-
-
-

@@ -38,7 +38,6 @@ def authenticate(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
     user = authenticationController.checkLogin(username, password)
-    print('user', user)
     if user is not None:
         request.session['user'] = user.id
         login(request, user)
@@ -82,6 +81,8 @@ def displayAllFiles(request):
     return response
 
 
+
+
 # ----------------------#GroupApi#----------------------
 
 def newGroup(request):
@@ -92,6 +93,15 @@ def newGroup(request):
     response['Content-Type'] = 'application/json'
     response['Access-Control-Allow-Origin'] = '*'
     return response
+
+
+def displayAllGroups():
+    groups = groupController.getAll()
+    serializer = GroupSerializer(groups, many=True)
+    result = serializer.data
+    print('All groups:', result)
+    response = JsonResponse(serializer.data)
+    return response;
 
 
 # ---------------#InvitatinController#-----------

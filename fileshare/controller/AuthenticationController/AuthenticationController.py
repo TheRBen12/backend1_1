@@ -15,8 +15,6 @@ class AuthenticationController:
             if(user.check_password(password)):
                 return user
             else:
-                print('user.password', user.password)
-                print('password', password)
                 print("incorrect password")
                 return None
         except User.DoesNotExist:
