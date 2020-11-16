@@ -25,6 +25,7 @@ SECRET_KEY = '!0o=7dbzt#$-1t-v4e&goop&xb4hwpzf4w#1=v)#gjv%3ucn-0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# start server with (Terminal): python manage.py runserver
 
 # Application definition
 
@@ -47,7 +48,7 @@ DATABASES = {
         'NAME': 'FILESHARE',
         'PORT': '3306',
         'USER': 'root',
-        'PASSWORD': 'lamav418'
+        'PASSWORD': 'Welcome$20'
     }
 }
 
