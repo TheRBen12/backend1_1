@@ -48,7 +48,7 @@ DATABASES = {
         'NAME': 'FILESHARE',
         'PORT': '3306',
         'USER': 'root',
-        'PASSWORD': 'Welcome$20'
+        'PASSWORD': 'lamav418'
     }
 }
 
