@@ -4,8 +4,10 @@
     "\\backend1_1",
     "\\fileshare",
     "\\fileshare\\controller",
+    "\\fileshare\\controller\\AuthenticationController",
+    "\\fileshare\\controller\\PersonController",
     "\\fileshare\\controller\\RegistrationController"
   ],
-  "SelectedNode": "\\backend1_1\\settings.py",
+  "SelectedNode": "\\fileshare\\views.py",
   "PreviewInSolutionExplorer": false
 }
