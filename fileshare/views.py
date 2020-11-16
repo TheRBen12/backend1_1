@@ -97,6 +97,7 @@ def newGroup(request):
 # ---------------#InvitatinController#-----------
 
 def newInvitation(request):
-    invitationReceivers = request.body
+    invitation = request.body
     sender = request.session.get('user')
-    invitation = invitationController.newInvitation(invitationReceivers, sender)
+    invitation = invitationController.newInvitation(invitation, sender)
+
