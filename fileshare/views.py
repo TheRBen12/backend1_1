@@ -46,7 +46,7 @@ def authenticate(request):
         response = JsonResponse(serializer.data)
         return response
     else:
-        return HttpResponse('login failed')
+        return JsonResponse('login failed')
 
 
 def displayPersonByEmail(request):
