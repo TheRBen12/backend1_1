@@ -16,7 +16,6 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from django.conf.urls import include, url
 from fileshare import views
 
 urlpatterns = [
@@ -26,7 +25,8 @@ urlpatterns = [
     #path('person/delete/', views.deletePerson),
     path('newfile/', views.newFile),
     path('group/', views.newGroup),
-    path('allfiles/', views.displayAllFiles)
+    path('allfiles/', views.displayAllPublicFiles)
+
 
     #path('login/', include(('fileshare.urls', 'fileshare'), namespace='fileshare')),
     #path('newFile/', include(('fileshare.urls', 'fileshare'), namespace='fileshare')),
