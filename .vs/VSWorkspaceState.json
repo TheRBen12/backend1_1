@@ -2,12 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\backend1_1",
-    "\\fileshare",
-    "\\fileshare\\controller",
-    "\\fileshare\\controller\\AuthenticationController",
-    "\\fileshare\\controller\\PersonController",
-    "\\fileshare\\controller\\RegistrationController"
+    "\\fileshare"
   ],
-  "SelectedNode": "\\fileshare\\views.py",
+  "SelectedNode": "\\backend1_1\\urls.py",
   "PreviewInSolutionExplorer": false
 }
