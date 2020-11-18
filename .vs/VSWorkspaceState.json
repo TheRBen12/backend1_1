@@ -2,8 +2,12 @@
   "ExpandedNodes": [
     "",
     "\\backend1_1",
-    "\\fileshare"
+    "\\fileshare",
+    "\\fileshare\\api",
+    "\\fileshare\\api\\fileapi",
+    "\\fileshare\\controller\\AuthenticationController\\__pycache__",
+    "\\fileshare\\serializer"
   ],
-  "SelectedNode": "\\backend1_1\\urls.py",
+  "SelectedNode": "\\fileshare\\views.py",
   "PreviewInSolutionExplorer": false
 }

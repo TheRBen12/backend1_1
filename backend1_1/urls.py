@@ -21,10 +21,11 @@ from fileshare import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', views.register),
-    path('login/', views.authenticate),
+    path('login/', views.login),
+    path('logout/', views.logout),
     #path('person/delete/', views.deletePerson),
     path('newfile/', views.newFile),
-    path('group/', views.newGroup),
+    path('newgroup/', views.newGroup),
     path('allfiles/', views.displayAllPublicFiles),
     path('ownfiles/', views.getFilesByOwnerId)
 

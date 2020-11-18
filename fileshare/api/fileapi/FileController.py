@@ -39,7 +39,7 @@ class FileController:
         if len(n) > 0:
             return FileType.objects.get(type=typeName)
         else:
-            type = self.newType(typeName)
+            type = self.newFileType(typeName)
             return type
 
 
