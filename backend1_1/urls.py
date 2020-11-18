@@ -24,7 +24,7 @@ urlpatterns = [
     path('login/', views.authenticate),
     #path('person/delete/', views.deletePerson),
     path('newfile/', views.newFile),
-    path('group/', views.newGroup),
+    path('newgroup/', views.newGroup),
     path('allfiles/', views.displayAllPublicFiles)
 
 

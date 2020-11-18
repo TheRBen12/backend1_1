@@ -7,6 +7,8 @@ from .api.fileapi.FileController import FileController
 from .api.groupapi.GroupController import GroupController
 from .api.invitationapi.InvitationController import InvitationController
 from .serializer.modelserializers import PersonSerializer, FileSerializer, GroupSerializer
+import json
+
 
 # Controllers
 registerController = RegistrationController()
@@ -100,10 +102,10 @@ def getFilesByOwnerId(request):
 # ----------------------#GroupApi#----------------------
 
 def newGroup(request):
-    group = request.body
-    group = groupController.newGroup(group)
+    data = json.loads(request.body)
+    group = groupController.newGroup(data)
     serializer = GroupSerializer(group)
-    response = HttpResponse(serializer.data)
+    response = JsonResponse(serializer.data)
     response['Content-Type'] = 'application/json'
     response['Access-Control-Allow-Origin'] = '*'
     return response
