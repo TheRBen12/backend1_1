@@ -31,7 +31,7 @@ def register(request):
         response = JsonResponse(serializer.data)
         return response
     else:
-        return HttpResponse('sign up failed')
+        return JsonResponse('sign up failed')
 
 
 def authenticate(request):
@@ -87,6 +87,7 @@ def displayAllPublicFiles(request):
 
 
 def getFilesByOwnerId(request):
+    print("came here")
     id = request.session.get("user")
     files = [file for file in fileController.getAllFiles() if file.owner.id == id]
     serializer = FileSerializer(files, many=True)
