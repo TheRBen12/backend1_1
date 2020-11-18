@@ -1,11 +1,11 @@
 from django.contrib.auth import login
 from django.http import HttpResponse, JsonResponse
-from .controller.RegistrationController.RegistrationController import RegistrationController
-from .controller.PersonController.PersonController import PersonController
-from .controller.AuthenticationController.AuthenticationController import AuthenticationController
-from .controller.FileController.FileController import FileController
-from .controller.GroupController.GroupController import GroupController
-from .controller.InvitationController.InvitationController import InvitationController
+from .api.personapi.RegistrationController import RegistrationController
+from .api.personapi.PersonController import PersonController
+from .api.authenticationapi.AuthenticationController import AuthenticationController
+from .api.fileapi.FileController import FileController
+from .api.groupapi.GroupController import GroupController
+from .api.invitationapi.InvitationController import InvitationController
 from .serializer.modelserializers import PersonSerializer, FileSerializer, GroupSerializer
 
 # Controllers
@@ -39,10 +39,11 @@ def authenticate(request):
     password = request.POST.get('password')
     user = authenticationController.checkLogin(username, password)
     if user is not None:
-        request.session['user'] = user.id
         login(request, user)
         serializer = PersonSerializer(user)
         response = JsonResponse(serializer.data)
+        request.session['user'] = user.id
+        response.set_cookie('user', user.id, expires=None)
         return response
     else:
         return HttpResponse('login failed')
@@ -62,9 +63,12 @@ def displayPersonByEmail(request):
 
 def newFile(request):
     file = request.FILES['file']
+    typeName = file.content_type
+    type = fileController.getFileType(typeName)
     owner = personController.getPersonByid(int(request.POST.get('owner')))
-    typeid = int(request.POST.get('type'))
-    file = fileController.newFile(file, owner, typeid)
+    file = fileController.newFile(file, owner, type)
+    file.public = fileController.setPublicity(int(request.POST.get('state')))
+    file.save()
     serializer = FileSerializer(file)
     response = JsonResponse(serializer.data)
     return response
@@ -86,13 +90,11 @@ def getFilesByOwnerId(request):
     id = request.session.get("user")
     files = [file for file in fileController.getAllFiles() if file.owner.id == id]
     serializer = FileSerializer(files, many=True)
-    result = serializer.data
-    print('All files:', result)
-    response = HttpResponse(files)
+    print('All files:', serializer.data)
+    response = HttpResponse(serializer.data)
     response['Content-Type'] = 'application/json'
     response['Access-Control-Allow-Origin'] = '*'
     return response
-
 
 
 # ----------------------#GroupApi#----------------------
@@ -122,4 +124,9 @@ def newInvitation(request):
     invitation = request.body
     sender = request.session.get("user")
     invitation = invitationController.newInvitation(invitation, sender)
-    return HttpResponse("sent invitation successfully")
+    response = JsonResponse(invitation)
+    return response
+
+
+def updateInvitation(request):
+    return None

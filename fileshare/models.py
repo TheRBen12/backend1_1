@@ -42,7 +42,6 @@ class InvitationReceiver(models.Model):
     invitation = models.ForeignKey(Invitation, on_delete=models.DO_NOTHING)
 
 
-
 class FileType(models.Model):
     type = models.CharField(max_length=100)
 
