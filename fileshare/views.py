@@ -1,3 +1,5 @@
+from typing import Dict
+
 from django.contrib.auth import login
 from django.http import HttpResponse, JsonResponse
 from .api.personapi.RegistrationController import RegistrationController
@@ -6,9 +8,9 @@ from .api.authenticationapi.AuthenticationController import AuthenticationContro
 from .api.fileapi.FileController import FileController
 from .api.groupapi.GroupController import GroupController
 from .api.invitationapi.InvitationController import InvitationController
+from .models import File
 from .serializer.modelserializers import PersonSerializer, FileSerializer, GroupSerializer
 import json
-
 
 # Controllers
 registerController = RegistrationController()
@@ -97,6 +99,14 @@ def getFilesByOwnerId(request):
     response['Content-Type'] = 'application/json'
     response['Access-Control-Allow-Origin'] = '*'
     return response
+
+
+def updateFile(request):
+    data: Dict = json.loads(request.body)
+    file = fileController.updateFile(data)
+    serializer = FileSerializer(file)
+    return JsonResponse(serializer.data)
+
 
 
 # ----------------------#GroupApi#----------------------

@@ -1,5 +1,5 @@
 from fileshare.models import File, FileType
-from typing import List
+from typing import List, Dict
 from datetime import datetime
 
 
@@ -11,6 +11,9 @@ class FileController:
     def getAllFiles(self) -> List[File]:
         return File.objects.all()
 
+    def getFileById(self, id: int):
+        return File.objects.get(id=id)
+
     def newFile(self, file: File, owner, type: FileType) -> File:
         file = File.objects.create(file=file, owner=owner, size=file.size,
                                    public=False, uploaded_at=datetime.now(),
@@ -18,8 +21,8 @@ class FileController:
 
         return file
 
-    def updateFile(self, file: File) -> File:
-        file = File.objects.update(file)
+    def updateFile(self, fileData: Dict) -> File:
+        file = File(fileData)
         return file
 
     def checkFileSize(self, file: File) -> bool:
