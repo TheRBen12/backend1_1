@@ -16,7 +16,6 @@ class FileController:
                                    public=False, uploaded_at=datetime.now(),
                                    name=file.name, price=0.0, type=type)
 
-
         return file
 
     def updateFile(self, file: File) -> File:
@@ -33,15 +32,13 @@ class FileController:
             return True
         return False
 
-
     def getFileType(self, typeName: str) -> FileType:
         n = FileType.objects.filter(type=typeName)
         if len(n) > 0:
             return FileType.objects.get(type=typeName)
         else:
-            type = self.newType(typeName)
+            type = self.newFileType(typeName)
             return type
-
 
     def newFileType(self, typeName) -> FileType:
         return FileType.objects.create(type=typeName)

@@ -28,6 +28,7 @@ urlpatterns = [
     path('allfiles/', views.displayAllPublicFiles)
 
 
+
     #path('login/', include(('fileshare.urls', 'fileshare'), namespace='fileshare')),
     #path('newFile/', include(('fileshare.urls', 'fileshare'), namespace='fileshare')),
     #path('file/', include(('fileshare.urls', 'fileshare'), namespace='fileshare')),

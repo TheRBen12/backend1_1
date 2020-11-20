@@ -33,7 +33,7 @@ def register(request):
         response = JsonResponse(serializer.data)
         return response
     else:
-        return HttpResponse('sign up failed')
+        return HttpResponse('Email already exists')
 
 
 def authenticate(request):
