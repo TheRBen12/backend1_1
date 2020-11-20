@@ -59,9 +59,12 @@ class FileTestCase(TestCase):
         self.assertEqual(self.file.public, True)
 
     def test_update_File(self):
+        self.file = self.new_file()
         files = [file for file in File.objects.all() if file.public]
         current_amount_public_files = len(files)
         response = self.client.post('/updatefile/', self.file)
+        files = [file for file in File.objects.all() if file.public]
+        self.assertTrue(len(files) == current_amount_public_files-1)
 
     def new_file(self) -> File:
         file = File.objects.create(file='../pics/Studie.docx', name="Studie", uploaded_at=datetime.now(),

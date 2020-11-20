@@ -21,22 +21,15 @@ from fileshare import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', views.register),
-    path('login/', views.authenticate),
-    #path('person/delete/', views.deletePerson),
+    path('login/', views.login),
+    path('logout/', views.logout),
     path('newfile/', views.newFile),
     path('newgroup/', views.newGroup),
     path('allfiles/', views.displayAllPublicFiles),
-    path('updatefile/', views.updateFile)
+    path('updatefile/', views.updateFile),
+    path('ownfiles/', views.getFilesByOwnerId)
 
 
-    #path('login/', include(('fileshare.urls', 'fileshare'), namespace='fileshare')),
-    #path('newFile/', include(('fileshare.urls', 'fileshare'), namespace='fileshare')),
-    #path('file/', include(('fileshare.urls', 'fileshare'), namespace='fileshare')),
-
-
-    #url(r'^login/', include(('fileshare.urls', 'fileshare'), namespace='fileshare')),
-    #url(r'^newfile/', include(('fileshare.urls', 'fileshare'), namespace='fileshare')),
-    #url(r'^files/', include(('fileshare.urls', 'fileshare'), namespace='fileshare'))
 
 
 

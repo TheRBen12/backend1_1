@@ -10,7 +10,7 @@ class PersonSerializer(serializers.Serializer):
 class FileSerializer(serializers.Serializer):
     file = serializers.FileField()
     name = serializers.CharField()
-    uploaded_at = serializers.DateTimeField()
+    uploaded_at = serializers.DateField()
     public = serializers.BooleanField()
     price = serializers.FloatField
 

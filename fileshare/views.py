@@ -1,6 +1,6 @@
 from typing import Dict
 
-from django.contrib.auth import login
+from django.contrib import auth
 from django.http import HttpResponse, JsonResponse
 from .api.personapi.RegistrationController import RegistrationController
 from .api.personapi.PersonController import PersonController
@@ -8,9 +8,9 @@ from .api.authenticationapi.AuthenticationController import AuthenticationContro
 from .api.fileapi.FileController import FileController
 from .api.groupapi.GroupController import GroupController
 from .api.invitationapi.InvitationController import InvitationController
-from .models import File
 from .serializer.modelserializers import PersonSerializer, FileSerializer, GroupSerializer
 import json
+from django.views.decorators.csrf import csrf_exempt
 
 # Controllers
 registerController = RegistrationController()
@@ -22,7 +22,7 @@ invitationController = InvitationController()
 
 
 # --------------------------#Personapi#----------------------------
-# @csrf_exempt
+@csrf_exempt
 def register(request):
     email = request.POST.get('email')
     username = request.POST.get('username')
@@ -30,27 +30,36 @@ def register(request):
 
     if not registerController.checkIfEmailExists(email):
         person = personController.newPerson(email, username, password)
+        user = auth.authenticate(request, username=username, password=password)
+        auth.login(request, user)
         serializer = PersonSerializer(person)
+        # request.session['user'] = person.id
         print('serialized data:', serializer.data)
         response = JsonResponse(serializer.data)
         return response
     else:
-        return HttpResponse('Email already exists')
+        return JsonResponse('Email already exists')
 
 
-def authenticate(request):
+@csrf_exempt
+def login(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
-    user = authenticationController.checkLogin(username, password)
+    user = auth.authenticate(request, username=username, password=password)
     if user is not None:
-        login(request, user)
+        auth.login(request, user)
+        print(request.user.id)
         serializer = PersonSerializer(user)
         response = JsonResponse(serializer.data)
-        request.session['user'] = user.id
         response.set_cookie('user', user.id, expires=None)
         return response
     else:
-        return HttpResponse('login failed')
+        return JsonResponse('login failed')
+
+
+def logout(request):
+    auth.logout(request)
+    return JsonResponse("logged out", safe=False)
 
 
 def displayPersonByEmail(request):
@@ -91,11 +100,14 @@ def displayAllPublicFiles(request):
 
 
 def getFilesByOwnerId(request):
-    id = request.session.get("user")
+    print("came here")
+    print(request.user)
+    id = request.user.id
+    print(id)
     files = [file for file in fileController.getAllFiles() if file.owner.id == id]
     serializer = FileSerializer(files, many=True)
-    print('All files:', serializer.data)
-    response = HttpResponse(serializer.data)
+    # print('All files:', serializer.data)
+    response = JsonResponse(serializer.data, safe=False)
     response['Content-Type'] = 'application/json'
     response['Access-Control-Allow-Origin'] = '*'
     return response
@@ -106,7 +118,6 @@ def updateFile(request):
     file = fileController.updateFile(data)
     serializer = FileSerializer(file)
     return JsonResponse(serializer.data)
-
 
 
 # ----------------------#GroupApi#----------------------

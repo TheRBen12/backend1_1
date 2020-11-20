@@ -29,7 +29,6 @@ class PersonGroupMember(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     joined_at = models.DateField()
 
-
 class Invitation(models.Model):
     sender = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)

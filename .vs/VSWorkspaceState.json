@@ -3,10 +3,10 @@
     "",
     "\\backend1_1",
     "\\fileshare",
-    "\\fileshare\\controller",
-    "\\fileshare\\controller\\AuthenticationController",
-    "\\fileshare\\controller\\PersonController",
-    "\\fileshare\\controller\\RegistrationController"
+    "\\fileshare\\api",
+    "\\fileshare\\api\\fileapi",
+    "\\fileshare\\controller\\AuthenticationController\\__pycache__",
+    "\\fileshare\\serializer"
   ],
   "SelectedNode": "\\fileshare\\views.py",
   "PreviewInSolutionExplorer": false
