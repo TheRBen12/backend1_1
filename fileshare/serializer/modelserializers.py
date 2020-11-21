@@ -8,12 +8,14 @@ class PersonSerializer(serializers.Serializer):
 
 
 class FileSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     file = serializers.FileField()
     name = serializers.CharField()
     uploaded_at = serializers.DateTimeField()
+    price = serializers.FloatField()
+    size = serializers.IntegerField()
     public = serializers.BooleanField()
     owner = PersonSerializer()
-    price = serializers.FloatField
 
 
 class GroupSerializer(serializers.Serializer):

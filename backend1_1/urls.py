@@ -27,7 +27,8 @@ urlpatterns = [
     path('newgroup/', views.newGroup),
     path('allfiles/', views.displayAllPublicFiles),
     path('updatefile/', views.updateFile),
-    path('ownfiles/', views.getFilesByOwnerId)
+    path('ownfiles/', views.getFilesByOwnerId),
+    path('cartfiles/', views.displayCartFiles)
 
 
 
