@@ -98,9 +98,11 @@ def displayAllPublicFiles(request):
     return response
 
 def displayCartFiles(request):
-    ids = request.POST.get("ids")
+    cartContent = request.POST.get("ids")
+    ids = cartContent.split(";")
+    print("ids", ids)
     files = fileController.getAllFiles()
-    files = [file for file in files if ids.contains(file.id)]
+    files = [file for file in files if str(file.id) in ids]
     serializer = FileSerializer(files, many=True)
     response = JsonResponse(serializer.data, safe=False)
     response['Content-Type'] = 'application/json'
