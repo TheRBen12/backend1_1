@@ -75,7 +75,7 @@ def displayPersonByEmail(request):
 # ------------------------------#Fileapi#-------------------------
 
 def newFile(request):
-    file = request.FILES['file']
+    file = request.FILES['files']
     typeName = file.content_type
     type = fileController.getFileType(typeName)
     owner = personController.getPersonByid(int(request.POST.get('owner')))
@@ -114,10 +114,12 @@ def getFilesByOwnerId(request):
 
 
 def updateFile(request):
-    data: Dict = json.loads(request.body)
-    file = fileController.updateFile(data)
+    file = request.FILES['files']
+    file = fileController.updateFile(file)
     serializer = FileSerializer(file)
-    return JsonResponse(serializer.data)
+    response = JsonResponse(serializer.data)
+    response['Access-Control-Allow-Origin'] = '*'
+    return None
 
 
 # ----------------------#GroupApi#----------------------
@@ -138,7 +140,7 @@ def displayAllGroups():
     result = serializer.data
     print('All groups:', result)
     response = JsonResponse(serializer.data)
-    return response;
+    return response
 
 
 # ---------------#InvitatinController#-----------

@@ -21,8 +21,9 @@ class FileController:
 
         return file
 
-    def updateFile(self, fileData: Dict) -> File:
-        file = File(fileData)
+    def updateFile(self, file: File) -> File:
+        file = File.objects.update(file=file.file, public=file.public, owner=file.owner, type=file.type,
+                                   size=file.size )
         return file
 
     def checkFileSize(self, file: File) -> bool:

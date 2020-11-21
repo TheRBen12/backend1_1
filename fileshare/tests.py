@@ -1,9 +1,15 @@
+import os
 from datetime import datetime
 
 from django.contrib.auth.models import User
 from django.test import TestCase, Client, RequestFactory
+from requests import Response
+import requests
+from fileshare.api.fileapi.FileController import FileController
 from fileshare.models import File, FileType
 import json
+from fileshare.views import newFile, updateFile
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 # Create your tests here.
@@ -23,7 +29,6 @@ class RegistrationTestCase(TestCase):
 
     def email_already_exist(self):
         response = self.client.post('/register/', {'username': 'mueller', 'password': 'test', 'email': 'admin@ad.ch'})
-        print(response.content.decode())
         content = response.content.decode()
         self.assertEqual(content, 'email already exists')
 
@@ -45,34 +50,41 @@ class LoginTestCase(TestCase):
 class FileTestCase(TestCase):
 
     def setUp(self):
-        self.file = None
+        self.factory = RequestFactory()
         User.objects.create(username='admin', email='admin@ad.ch', password='admin')
-        self.fileType = FileType.objects.create(type= 'application/pdf')
-
-    def test_new_file_type(self):
-        self.assertTrue(self.fileType is not None)
+        self.fileType = FileType.objects.create(type='application/pdf')
+        self.new_file()
 
     def test_new_file_post_request(self):
-        self.file = self.new_file()
-        self.assertTrue(self.file is not None)
-        self.assertEqual(self.file.owner.username, 'admin')
-        self.assertEqual(self.file.public, True)
+        owner = User.objects.last().id
+        current_amount_files = len(File.objects.all())
+        file = open('fileshare/Studie.docx', 'r')
+        file = File(file)
+        request = self.factory.post('/newfile/', data={'owner': owner, 'state': 1})
+        request.FILES['files'] = file
+        response = newFile(request=request)
+        self.assertEqual(response.status_code, 200)
+        response = json.loads(response.content.decode())
+        self.assertTrue(response['id'], not None)
+        next_current_amount_files = len(File.objects.all())
+        self.assertTrue(next_current_amount_files > current_amount_files)
 
-    def test_update_File(self):
-        self.file = self.new_file()
-        files = [file for file in File.objects.all() if file.public]
-        current_amount_public_files = len(files)
-        response = self.client.post('/updatefile/', self.file)
-        files = [file for file in File.objects.all() if file.public]
-        self.assertTrue(len(files) == current_amount_public_files-1)
+    def test_update_file(self):
+        file = File.objects.last()
+        file.public = False
+        request = self.factory.put('/updatefile/')
+        request.FILES['files'] = file
+        response = updateFile(request=request)
 
-    def new_file(self) -> File:
-        file = File.objects.create(file='../pics/Studie.docx', name="Studie", uploaded_at=datetime.now(),
+    def new_file(self):
+        file = File.objects.create(file='Studie.docx', name="Studie", uploaded_at=datetime.now(),
                                    owner=User.objects.last()
                                    , price=0.0, public=True, type=self.fileType, size=0.0)
-        return file
 
 
 class GroupTestcase(TestCase):
     def setUp(self):
-        self.client = Client()
+        self.factory = RequestFactory()
+        User.objects.create(username='admin', email='admin@ad.ch', password='admin')
+
+
