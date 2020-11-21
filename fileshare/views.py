@@ -86,14 +86,12 @@ def newFile(request):
     response = JsonResponse(serializer.data)
     return response
 
-
+@csrf_exempt
 def displayAllPublicFiles(request):
     files = fileController.getAllFiles()
-    files = [file for file in files if file.public]
+    files = [file for file in files if file.public==1]
     serializer = FileSerializer(files, many=True)
-    result = serializer.data
-    print('All files:', result)
-    response = HttpResponse(files)
+    response = JsonResponse(serializer.data, safe=False)
     response['Content-Type'] = 'application/json'
     response['Access-Control-Allow-Origin'] = '*'
     return response

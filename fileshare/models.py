@@ -47,7 +47,7 @@ class FileType(models.Model):
 
 class File(models.Model):
     name = models.CharField(max_length=100)
-    uploaded_at = models.DateField()
+    uploaded_at = models.DateTimeField()
     public = models.BooleanField()
     price = models.FloatField()
     type = models.ForeignKey(FileType, on_delete=models.CASCADE)
