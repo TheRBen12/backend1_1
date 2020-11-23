@@ -45,7 +45,7 @@ def login(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
     user = authenticationController.checkLogin(request, username, password)
-    if user is not None:
+    if user:
         auth.login(request, user)
         print(request.user.id)
         serializer = PersonSerializer(user)
@@ -89,11 +89,16 @@ def newFile(request):
     owner = personController.getPersonByid(int(request.POST.get('owner')))
     price = request.POST.get('price')
     file = fileController.newFile(file, owner, price, type)
-    file.public = fileController.setPublicity(int(request.POST.get('state')))
-    file.save()
-    serializer = FileSerializer(file)
-    response = JsonResponse(serializer.data)
-    return response
+    if file:
+        file.public = fileController.setPublicity(int(request.POST.get('state')))
+        file.save()
+        serializer = FileSerializer(file)
+        response = JsonResponse(serializer.data)
+        return response
+    else:
+        response = JsonResponse(file, safe=False)
+        return response
+
 
 
 @csrf_exempt
@@ -104,6 +109,16 @@ def displayAllPublicFiles(request):
     response = JsonResponse(serializer.data, safe=False)
     response['Content-Type'] = 'application/json'
     response['Access-Control-Allow-Origin'] = '*'
+    return response
+
+def displayAllAccessableFiles(request, id):
+    id = int(id)
+    files = fileController.getAllFiles()
+    files = [file for file in files if file.public == 1 or file.owner.id == id]
+    files = files + shareController.getSharedFilesByPerson(id)
+    serializer = FileSerializer(files, many=True)
+    response = JsonResponse(serializer.data, safe=False)
+    response['Content-Type'] = 'application/json'
     return response
 
 def displayCartFiles(request):
@@ -119,8 +134,8 @@ def displayCartFiles(request):
     return response
 
 
-def getFilesByOwnerId(request):
-    id = request.GET.get("ownerid")
+def getFilesByOwnerId(request, id):
+    id = int(id)
     files = [file for file in fileController.getAllFiles() if file.owner.id == id]
     serializer = FileSerializer(files, many=True)
     response = JsonResponse(serializer.data, safe=False)
@@ -140,18 +155,17 @@ def updateFile(request):
 
 def deleteFile(request, id):
     id = int(id)
-    file = fileController.deleteFile(id)
+    file = fileController.getFileById(id)
+    fileController.deleteFile(id)
     serializer = FileSerializer(file)
     response = JsonResponse(serializer.data)
-    response['Access-Control-Allow-Origin'] = '*'
     return response
 
 
 # ----------------------#GroupApi#----------------------
 
 def newGroup(request):
-    data = json.loads(request.body)
-    group = groupController.newGroup(data)
+    group = groupController.newGroup(request.POST.get('name'), int(request.POST.get('creator')))
     serializer = GroupSerializer(group)
     response = JsonResponse(serializer.data)
     response['Content-Type'] = 'application/json'
@@ -197,11 +211,11 @@ class ShareView:
             response = JsonResponse(serializer.data, safe=False)
             return response
         else:
-            return JsonResponse('File already shared')
+            return JsonResponse('error-already-shared', safe=False)
 
     def getSharedFilesByPerson(self, request, id):
         id = int(id)
         sharedFiles = shareController.getSharedFilesByPerson(id)
-        serializer = ShareFilePersonSerializer(sharedFiles, many=True)
+        serializer = FileSerializer(sharedFiles, many=True)
         response = JsonResponse(serializer.data, safe=False)
         return response

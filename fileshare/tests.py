@@ -1,9 +1,9 @@
 from datetime import datetime
 from django.contrib.auth.models import User
 from django.test import TestCase, Client, RequestFactory
-from fileshare.models import File, FileType, FileSharePerson
+from fileshare.models import File, FileType, FileSharePerson, Group
 import json
-from fileshare.views import newFile, updateFile, deleteFile, getFilesByOwnerId, ShareView
+from fileshare.views import newFile, updateFile, deleteFile, getFilesByOwnerId, ShareView, newGroup
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 
@@ -58,7 +58,7 @@ class FileTestCase(TestCase):
         file = None
         with open('fileshare/Studie.docx', 'rb') as f:
             file = SimpleUploadedFile("Studie.docx", f.read())
-        request = self.factory.post('/newfile/', data={'owner': owner, 'state': 1})
+        request = self.factory.post('/newfile/', data={'owner': owner, 'state': 1, 'price': 12.00})
         request.FILES['file'] = file
         response = newFile(request=request)
         self.assertEqual(response.status_code, 200)
@@ -82,7 +82,7 @@ class FileTestCase(TestCase):
         current_amount_public_files = len([file for file in File.objects.all()])
         id = File.objects.last().id
         request = self.factory.post('/deletefile/', data={'id': id})
-        response = deleteFile(request=request)
+        response = deleteFile(request=request, id=id)
         next_current_amount_public_files = len([file for file in File.objects.all()])
         self.assertEqual(response.status_code, 200)
         self.assertTrue(next_current_amount_public_files == current_amount_public_files - 1)
@@ -102,8 +102,21 @@ class FileTestCase(TestCase):
 
 class GroupTestcase(TestCase):
     def setUp(self):
+        self.client = Client()
         self.factory = RequestFactory()
         User.objects.create(username='admin', email='admin@ad.ch', password='admin')
+
+
+    def test_new_group_post(self):
+        request = self.factory.post('/newgroup/',data={'name': 'testgroup', 'creator': User.objects.last().id} )
+        current_amount_groups = len(Group.objects.all())
+        response = newGroup(request)
+        next_current_amount_groups = len(Group.objects.all())
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(next_current_amount_groups > current_amount_groups)
+        self.assertTrue(Group.objects.last().creator_id == User.objects.last().id)
+
+
 
 
 class ShareFilePersonCase(TestCase):

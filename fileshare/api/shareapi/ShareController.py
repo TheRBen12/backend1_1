@@ -20,6 +20,6 @@ class ShareController:
 
     def getSharedFilesByPerson(self, receiver: int):
         list = FileSharePerson.objects.last()
-        sharedFiles = [sharedFile for sharedFile in FileSharePerson.objects.all() if sharedFile.receiver.id == receiver]
+        sharedFiles = [sharedFile.file for sharedFile in FileSharePerson.objects.all() if sharedFile.receiver.id == receiver]
         return sharedFiles
         pass

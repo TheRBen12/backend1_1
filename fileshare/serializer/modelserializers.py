@@ -8,9 +8,12 @@ class PersonSerializer(serializers.Serializer):
     username = serializers.CharField()
     id = serializers.IntegerField()
 
+class FileTypeSerializer(serializers.Serializer):
+    type = serializers.CharField()
 
 class FileSerializer(serializers.Serializer):
     id = serializers.IntegerField()
+    type = FileTypeSerializer()
     file = serializers.FileField()
     name = serializers.CharField()
     uploaded_at = serializers.DateTimeField()
@@ -18,7 +21,6 @@ class FileSerializer(serializers.Serializer):
     size = serializers.IntegerField()
     public = serializers.BooleanField()
     owner = PersonSerializer()
-
 
 class GroupSerializer(serializers.Serializer):
     name = serializers.CharField()

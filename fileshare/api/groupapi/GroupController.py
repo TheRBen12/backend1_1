@@ -10,9 +10,9 @@ class GroupController:
     def getAll(self) -> List:
         return Group.objects.all()
 
-    def newGroup(self, group: Dict) -> Group:
-        group = Group.objects.create(name=group['name'],
-                                     creator_id=group['creator'], created_at=datetime.now())
+    def newGroup(self, name: str, creator: int) -> Group:
+        group = Group.objects.create(name=name,
+                                     creator_id=creator, created_at=datetime.now())
         return group
 
     def updateGroup(self, group: Group) -> Group:

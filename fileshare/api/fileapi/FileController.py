@@ -1,5 +1,5 @@
 from fileshare.models import File, FileType
-from typing import List, Dict
+from typing import List, Dict, Optional
 from datetime import datetime
 
 
@@ -14,12 +14,13 @@ class FileController:
     def getFileById(self, id: int):
         return File.objects.get(id=id)
 
-    def newFile(self, file: File, owner, price, type: FileType) -> File:
-        file = File.objects.create(file=file, owner=owner, size=file.size,
-                                   public=False, uploaded_at=datetime.now(),
-                                   name=file.name, price=price, type=type)
-
-        return file
+    def newFile(self, file: File, owner, price, type: FileType) -> Optional[File]:
+        if self.checkFileSize(file):
+            file = File.objects.create(file=file, owner=owner, size=file.size, public=False, uploaded_at=datetime.now(),
+                                       name=file.name, price=price, type=type)
+            return file
+        else:
+            return None
 
     def updateFile(self, file_: File) -> File:
         file = File.objects.get(id=file_.id)
@@ -30,7 +31,7 @@ class FileController:
         return file
 
     def checkFileSize(self, file: File) -> bool:
-        if file.size > 100000:
+        if file.size > 1000000:
             return False
         return True
 
