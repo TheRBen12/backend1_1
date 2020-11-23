@@ -1,11 +1,6 @@
 from datetime import datetime
-
 from fileshare.models import Group
 from typing import List, Dict
-
-
-def getAll() -> List:
-    return Group.objects.all()
 
 
 class GroupController:
@@ -21,5 +16,10 @@ class GroupController:
         return group
 
     def updateGroup(self, group: Group) -> Group:
-        group.save()
+        group = Group.objects.update(id=group.id)
+        return group
+
+    def deleteGroup(self, id: int):
+        group = Group.objects.get(id=id)
+        group.delete()
         return group

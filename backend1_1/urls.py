@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from fileshare import views
+from fileshare.views import ShareView
+
+shareView = ShareView()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,10 +31,9 @@ urlpatterns = [
     path('allfiles/', views.displayAllPublicFiles),
     path('updatefile/', views.updateFile),
     path('ownfiles/', views.getFilesByOwnerId),
+    path('deletefile', views.deleteFile),
+    path('allpersons', views.displayAllPersons),
+    path('sharefileperson/', shareView.shareFilePerson),
+    path('sharefileperson/<str:id>/', shareView.getSharedFilesByPerson)
     path('cartfiles/', views.displayCartFiles)
-
-
-
-
-
 ]

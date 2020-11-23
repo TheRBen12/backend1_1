@@ -29,6 +29,7 @@ class PersonGroupMember(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     joined_at = models.DateField()
 
+
 class Invitation(models.Model):
     sender = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
@@ -66,3 +67,7 @@ class FileSharePerson(models.Model):
 class FileShareGroup(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING)
+
+
+class FileEvent(models.Model):
+    event = models.CharField(max_length=100)

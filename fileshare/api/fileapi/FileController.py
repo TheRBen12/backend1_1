@@ -21,8 +21,12 @@ class FileController:
 
         return file
 
-    def updateFile(self, fileData: Dict) -> File:
-        file = File(fileData)
+    def updateFile(self, file_: File) -> File:
+        file = File.objects.get(id=file_.id)
+        file.public = file_.public
+        file.name = file_.name
+        file.owner = file_.owner
+        file.save()
         return file
 
     def checkFileSize(self, file: File) -> bool:
@@ -45,3 +49,9 @@ class FileController:
 
     def newFileType(self, typeName) -> FileType:
         return FileType.objects.create(type=typeName)
+
+    def deleteFile(self, id: int):
+        file = File.objects.get(id=id)
+        file.delete()
+        return file
+        pass
