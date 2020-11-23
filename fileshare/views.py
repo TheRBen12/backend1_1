@@ -41,7 +41,6 @@ def register(request):
         return JsonResponse('Email already exists')
 
 
-@csrf_exempt
 def login(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
@@ -56,7 +55,7 @@ def login(request):
     else:
         return JsonResponse('login failed')
 
-
+@csrf_exempt
 def logout(request):
     auth.logout(request)
     return JsonResponse("logged out", safe=False)
