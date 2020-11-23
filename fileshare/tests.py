@@ -106,9 +106,8 @@ class GroupTestcase(TestCase):
         self.factory = RequestFactory()
         User.objects.create(username='admin', email='admin@ad.ch', password='admin')
 
-
     def test_new_group_post(self):
-        request = self.factory.post('/newgroup/',data={'name': 'testgroup', 'creator': User.objects.last().id} )
+        request = self.factory.post('/newgroup/', data={'name': 'testgroup', 'creator': User.objects.last().id})
         current_amount_groups = len(Group.objects.all())
         response = newGroup(request)
         next_current_amount_groups = len(Group.objects.all())
@@ -117,10 +116,9 @@ class GroupTestcase(TestCase):
         self.assertTrue(Group.objects.last().creator_id == User.objects.last().id)
 
 
-
-
 class ShareFilePersonCase(TestCase):
     def setUp(self):
+        Group.objects.all().delete()
         FileSharePerson.objects.all().delete()
         FileType.objects.all().delete()
         FileType.objects.create(type='application/pdf')
@@ -138,12 +136,14 @@ class ShareFilePersonCase(TestCase):
 
     def test_share_file_person(self):
         personid = User.objects.get(username='admin').id
-        current_amount_sharedFiles = len([sharedFile for sharedFile in FileSharePerson.objects.all() if sharedFile.receiver.id == personid])
+        current_amount_sharedFiles = len(
+            [sharedFile for sharedFile in FileSharePerson.objects.all() if sharedFile.receiver.id == personid])
         request = self.factory.post('/sharefileperson/',
                                     data={'receiver': User.objects.get(username='admin').id,
                                           'creator': User.objects.get(username='admin1').id,
                                           'file': File.objects.last().id})
         response = self.shareView.shareFilePerson(request=request)
-        next_current_amount_sharedFiles = len([sharedFile for sharedFile in FileSharePerson.objects.all() if sharedFile.receiver.id == personid])
+        next_current_amount_sharedFiles = len(
+            [sharedFile for sharedFile in FileSharePerson.objects.all() if sharedFile.receiver.id == personid])
         self.assertEqual(response.status_code, 200)
         self.assertTrue(next_current_amount_sharedFiles > current_amount_sharedFiles)
