@@ -14,10 +14,10 @@ class FileController:
     def getFileById(self, id: int):
         return File.objects.get(id=id)
 
-    def newFile(self, file: File, owner, type: FileType) -> File:
+    def newFile(self, file: File, owner, price, type: FileType) -> File:
         file = File.objects.create(file=file, owner=owner, size=file.size,
                                    public=False, uploaded_at=datetime.now(),
-                                   name=file.name, price=0.0, type=type)
+                                   name=file.name, price=price, type=type)
 
         return file
 

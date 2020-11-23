@@ -35,5 +35,5 @@ urlpatterns = [
     path('allpersons', views.displayAllPersons),
     path('sharefileperson/', shareView.shareFilePerson),
     path('sharefileperson/<str:id>/', shareView.getSharedFilesByPerson)
-
+    path('cartfiles/', views.displayCartFiles)
 ]

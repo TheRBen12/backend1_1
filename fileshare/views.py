@@ -88,7 +88,8 @@ def newFile(request):
     typeName = file.content_type
     type = fileController.getFileType(typeName)
     owner = personController.getPersonByid(int(request.POST.get('owner')))
-    file = fileController.newFile(file, owner, type)
+    price = request.POST.get('price')
+    file = fileController.newFile(file, owner, price, type)
     file.public = fileController.setPublicity(int(request.POST.get('state')))
     file.save()
     serializer = FileSerializer(file)
@@ -100,6 +101,18 @@ def newFile(request):
 def displayAllPublicFiles(request):
     files = fileController.getAllFiles()
     files = [file for file in files if file.public == 1]
+    serializer = FileSerializer(files, many=True)
+    response = JsonResponse(serializer.data, safe=False)
+    response['Content-Type'] = 'application/json'
+    response['Access-Control-Allow-Origin'] = '*'
+    return response
+
+def displayCartFiles(request):
+    cartContent = request.POST.get("ids")
+    ids = cartContent.split(";")
+    print("ids", ids)
+    files = fileController.getAllFiles()
+    files = [file for file in files if str(file.id) in ids]
     serializer = FileSerializer(files, many=True)
     response = JsonResponse(serializer.data, safe=False)
     response['Content-Type'] = 'application/json'
