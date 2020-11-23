@@ -31,9 +31,9 @@ urlpatterns = [
     path('allfiles/', views.displayAllPublicFiles),
     path('updatefile/', views.updateFile),
     path('ownfiles/', views.getFilesByOwnerId),
-    path('deletefile', views.deleteFile),
+    path('deletefile/<str:id>/', views.deleteFile),
     path('allpersons', views.displayAllPersons),
     path('sharefileperson/', shareView.shareFilePerson),
-    path('sharefileperson/<str:id>/', shareView.getSharedFilesByPerson)
+    path('sharefileperson/<str:id>/', shareView.getSharedFilesByPerson),
     path('cartfiles/', views.displayCartFiles)
 ]

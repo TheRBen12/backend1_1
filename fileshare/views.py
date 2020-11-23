@@ -138,8 +138,8 @@ def updateFile(request):
     return response
 
 
-def deleteFile(request):
-    id = int(request.POST.get('id'))
+def deleteFile(request, id):
+    id = int(id)
     file = fileController.deleteFile(id)
     serializer = FileSerializer(file)
     response = JsonResponse(serializer.data)

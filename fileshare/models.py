@@ -60,7 +60,7 @@ class File(models.Model):
 class FileSharePerson(models.Model):
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="creator")
     receiver = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="receiver")
-    file = models.ForeignKey(File, on_delete=models.DO_NOTHING)
+    file = models.ForeignKey(File, on_delete=models.CASCADE)
     shared_at = models.DateField()
 
 
