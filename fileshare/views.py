@@ -139,12 +139,12 @@ def updateFile(request):
     return response
 
 
-def deleteFile(request):
-    id = int(request.POST.get('id'))
-    file = fileController.deleteFile(id)
+def deleteFile(request, id):
+    id = int(id)
+    file = fileController.getFileById(id)
+    fileController.deleteFile(id)
     serializer = FileSerializer(file)
     response = JsonResponse(serializer.data)
-    response['Access-Control-Allow-Origin'] = '*'
     return response
 
 

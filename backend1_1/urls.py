@@ -27,6 +27,7 @@ urlpatterns = [
     path('login/', views.login),
     path('logout/', views.logout),
     path('newfile/', views.newFile),
+    path('file/delete/<str:id>/', views.deleteFile),
     path('newgroup/', views.newGroup),
     path('allfiles/', views.displayAllPublicFiles),
     path('updatefile/', views.updateFile),
@@ -34,6 +35,6 @@ urlpatterns = [
     path('deletefile', views.deleteFile),
     path('allpersons', views.displayAllPersons),
     path('sharefileperson/', shareView.shareFilePerson),
-    path('sharefileperson/<str:id>/', shareView.getSharedFilesByPerson)
+    path('sharefileperson/<str:id>/', shareView.getSharedFilesByPerson),
     path('cartfiles/', views.displayCartFiles)
 ]
