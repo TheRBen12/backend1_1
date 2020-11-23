@@ -8,7 +8,8 @@ from .api.authenticationapi.AuthenticationController import AuthenticationContro
 from .api.fileapi.FileController import FileController
 from .api.groupapi.GroupController import GroupController
 from .api.invitationapi.InvitationController import InvitationController
-from .serializer.modelserializers import PersonSerializer, FileSerializer, GroupSerializer
+from .api.shareapi.ShareController import ShareController
+from .serializer.modelserializers import PersonSerializer, FileSerializer, GroupSerializer, ShareFilePersonSerializer
 import json
 from django.views.decorators.csrf import csrf_exempt
 
@@ -19,6 +20,7 @@ authenticationController = AuthenticationController()
 fileController = FileController()
 groupController = GroupController()
 invitationController = InvitationController()
+shareController = ShareController()
 
 
 # --------------------------#Personapi#----------------------------
@@ -27,34 +29,32 @@ def register(request):
     email = request.POST.get('email')
     username = request.POST.get('username')
     password = request.POST.get('password')
-
     if not registerController.checkIfEmailExists(email):
         person = personController.newPerson(email, username, password)
         user = auth.authenticate(request, username=username, password=password)
         auth.login(request, user)
         serializer = PersonSerializer(person)
-        # request.session['user'] = person.id
         print('serialized data:', serializer.data)
         response = JsonResponse(serializer.data)
         return response
     else:
-        return JsonResponse('Email already exists')
+        return JsonResponse('Email already exists', safe=False)
 
 
 @csrf_exempt
 def login(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
-    user = auth.authenticate(request, username=username, password=password)
+    user = authenticationController.checkLogin(request, username, password)
     if user is not None:
         auth.login(request, user)
         print(request.user.id)
         serializer = PersonSerializer(user)
-        response = JsonResponse(serializer.data)
+        response = JsonResponse(serializer.data, safe=False)
         response.set_cookie('user', user.id, expires=None)
         return response
     else:
-        return JsonResponse('login failed')
+        return JsonResponse('login failed', safe=False)
 
 
 def logout(request):
@@ -72,10 +72,19 @@ def displayPersonByEmail(request):
     return response
 
 
+def displayAllPersons(request):
+    persons = personController.getAll()
+    serializer = PersonSerializer(persons, many=True)
+    response = JsonResponse(serializer.data, safe=False)
+    response['Content-Type'] = 'application/json'
+    response['Access-Control-Allow-Origin'] = '*'
+    return response
+
+
 # ------------------------------#Fileapi#-------------------------
 
 def newFile(request):
-    file = request.FILES['files']
+    file = request.FILES['file']
     typeName = file.content_type
     type = fileController.getFileType(typeName)
     owner = personController.getPersonByid(int(request.POST.get('owner')))
@@ -86,10 +95,11 @@ def newFile(request):
     response = JsonResponse(serializer.data)
     return response
 
+
 @csrf_exempt
 def displayAllPublicFiles(request):
     files = fileController.getAllFiles()
-    files = [file for file in files if file.public==1]
+    files = [file for file in files if file.public == 1]
     serializer = FileSerializer(files, many=True)
     response = JsonResponse(serializer.data, safe=False)
     response['Content-Type'] = 'application/json'
@@ -98,13 +108,9 @@ def displayAllPublicFiles(request):
 
 
 def getFilesByOwnerId(request):
-    print("came here")
-    print(request.user)
-    id = request.user.id
-    print(id)
+    id = request.GET.get("ownerid")
     files = [file for file in fileController.getAllFiles() if file.owner.id == id]
     serializer = FileSerializer(files, many=True)
-    # print('All files:', serializer.data)
     response = JsonResponse(serializer.data, safe=False)
     response['Content-Type'] = 'application/json'
     response['Access-Control-Allow-Origin'] = '*'
@@ -117,7 +123,16 @@ def updateFile(request):
     serializer = FileSerializer(file)
     response = JsonResponse(serializer.data)
     response['Access-Control-Allow-Origin'] = '*'
-    return None
+    return response
+
+
+def deleteFile(request):
+    id = int(request.POST.get('id'))
+    file = fileController.deleteFile(id)
+    serializer = FileSerializer(file)
+    response = JsonResponse(serializer.data)
+    response['Access-Control-Allow-Origin'] = '*'
+    return response
 
 
 # ----------------------#GroupApi#----------------------
@@ -153,3 +168,28 @@ def newInvitation(request):
 
 def updateInvitation(request):
     return None
+
+
+# ----------------#ShareApi-------------------------------
+
+
+class ShareView:
+
+    def shareFilePerson(self, request):
+        fileId = request.POST.get('file')
+        receiver = request.POST.get('receiver')
+        sender = request.POST.get('creator')
+        shared = shareController.newShareFilePerson(sender, receiver, fileId)
+        if shared is not None:
+            serializer = ShareFilePersonSerializer(shared)
+            response = JsonResponse(serializer.data, safe=False)
+            return response
+        else:
+            return JsonResponse('File already shared')
+
+    def getSharedFilesByPerson(self, request, id):
+        id = int(id)
+        sharedFiles = shareController.getSharedFilesByPerson(id)
+        serializer = ShareFilePersonSerializer(sharedFiles, many=True)
+        response = JsonResponse(serializer.data, safe=False)
+        return response

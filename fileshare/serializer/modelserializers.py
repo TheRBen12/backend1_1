@@ -1,3 +1,5 @@
+from abc import ABC
+
 from rest_framework import serializers
 
 
@@ -8,6 +10,7 @@ class PersonSerializer(serializers.Serializer):
 
 
 class FileSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     file = serializers.FileField()
     name = serializers.CharField()
     uploaded_at = serializers.DateTimeField()
@@ -27,18 +30,9 @@ class InvitationSerializer(serializers.Serializer):
     created_at = serializers.DateTimeField()
     creator = serializers.IntegerField()
 
-class ShareFilePersonSerializer:
-    file = serializers.FileField()
 
-
-
-
-
-
-
-
-
-
-
-
-
+class ShareFilePersonSerializer(serializers.Serializer):
+    file = FileSerializer()
+    receiver = PersonSerializer()
+    creator = PersonSerializer()
+    shared_at = serializers.DateField()

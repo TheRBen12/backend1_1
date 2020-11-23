@@ -1,3 +1,5 @@
+from typing import List
+
 from django.contrib.auth.models import User
 
 
@@ -16,4 +18,7 @@ class PersonController:
 
     def getPersonByid(self, id: int) -> User:
         return User.objects.get(id= id)
+
+    def getAll(self) -> List[User]:
+        return User.objects.all()
 
