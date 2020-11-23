@@ -45,7 +45,7 @@ def login(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
     user = authenticationController.checkLogin(request, username, password)
-    if user is not None:
+    if user:
         auth.login(request, user)
         print(request.user.id)
         serializer = PersonSerializer(user)
@@ -89,11 +89,16 @@ def newFile(request):
     owner = personController.getPersonByid(int(request.POST.get('owner')))
     price = request.POST.get('price')
     file = fileController.newFile(file, owner, price, type)
-    file.public = fileController.setPublicity(int(request.POST.get('state')))
-    file.save()
-    serializer = FileSerializer(file)
-    response = JsonResponse(serializer.data)
-    return response
+    if file:
+        file.public = fileController.setPublicity(int(request.POST.get('state')))
+        file.save()
+        serializer = FileSerializer(file)
+        response = JsonResponse(serializer.data)
+        return response
+    else:
+        response = JsonResponse(file, safe=False)
+        return response
+
 
 
 @csrf_exempt
@@ -150,8 +155,7 @@ def deleteFile(request, id):
 # ----------------------#GroupApi#----------------------
 
 def newGroup(request):
-    data = json.loads(request.body)
-    group = groupController.newGroup(data)
+    group = groupController.newGroup(request.POST.get('name'), int(request.POST.get('creator')))
     serializer = GroupSerializer(group)
     response = JsonResponse(serializer.data)
     response['Content-Type'] = 'application/json'
